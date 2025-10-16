@@ -3,29 +3,16 @@ import { getDistrictFoodGuide } from '../lib/api';
 import { FilterControls } from '../components/FilterControls';
 import { FoodGuide } from '../components/FoodGuide';
 import { SEO } from '../components/SEO';
+import { VenueCard } from '../components/VenueCard';
 import { motion } from 'framer-motion';
-
-interface DistrictVenue {
-  id: string;
-  name: string;
-  link?: string;
-  image?: string;
-  latitude?: number;
-  longitude?: number;
-  google_rating?: number;
-  google_review_count?: number;
-  mentor_note?: string;
-  must_order?: string;
-  mentor_tricks?: string[];
-  neighborhood_slug?: string;
-}
+import type { Venue } from '../types';
 
 interface DistrictCategory {
   id: string;
   category_name: string;
   category_slug: string;
   category_icon: string;
-  venues: DistrictVenue[];
+  venues: Venue[];
 }
 
 const neighborhoods = [
@@ -162,66 +149,7 @@ export function KadikoyPage() {
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {currentCategory.venues.map((venue, index) => (
-                    <motion.div
-                      key={venue.id}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.05 }}
-                      className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 group"
-                    >
-                      {venue.image && (
-                        <div className="h-48 overflow-hidden">
-                          <img
-                            src={venue.image}
-                            alt={venue.name}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                            onError={(e) => {
-                              e.currentTarget.src = `https://source.unsplash.com/800x600/?${venue.name},cafe,restaurant`;
-                            }}
-                          />
-                        </div>
-                      )}
-                      <div className="p-6">
-                        <h3 className="text-xl font-bold text-brand-dark mb-2">
-                          {venue.name}
-                        </h3>
-                        {venue.google_rating && (
-                          <div className="flex items-center gap-2 mb-3">
-                            <span className="text-yellow-500 font-bold">
-                              ⭐ {venue.google_rating}
-                            </span>
-                            <span className="text-gray-400 text-sm">
-                              ({venue.google_review_count?.toLocaleString()} yorum)
-                            </span>
-                          </div>
-                        )}
-                        {venue.mentor_note && (
-                          <p className="text-sm text-gray-600 mb-4 line-clamp-3">
-                            {venue.mentor_note}
-                          </p>
-                        )}
-                        {venue.must_order && (
-                          <div className="bg-blue-50 rounded-lg p-3 mb-4">
-                            <p className="text-xs font-bold text-blue-600 mb-1">
-                              MUTLAKA DENEYİN
-                            </p>
-                            <p className="text-sm font-semibold text-blue-900">
-                              {venue.must_order}
-                            </p>
-                          </div>
-                        )}
-                        {venue.link && (
-                          <a
-                            href={venue.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-brand-primary hover:text-brand-dark text-sm font-semibold transition-colors"
-                          >
-                            Detayları Gör →
-                          </a>
-                        )}
-                      </div>
-                    </motion.div>
+                    <VenueCard key={venue.id} venue={venue} index={index} />
                   ))}
                 </div>
               </motion.div>

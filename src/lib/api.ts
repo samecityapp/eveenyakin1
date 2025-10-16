@@ -316,9 +316,31 @@ export async function getDistrictFoodGuide(districtSlug: string) {
         return { ...category, venues: [] };
       }
 
+      // district_venues verilerini Venue tipine dönüştür
+      const transformedVenues = (venues || []).map((venue: any) => ({
+        id: venue.id,
+        food_category_id: venue.district_category_id,
+        name: venue.name,
+        mentor_note: venue.mentor_note || '',
+        reviews_summary: venue.reviews_summary || [],
+        mentor_tricks: venue.mentor_tricks || [],
+        must_order: venue.must_order || '',
+        image: venue.image_url || venue.image || '',
+        map_link: venue.google_maps_link || venue.link || '',
+        website_url: venue.website_url || null,
+        lat: venue.latitude || 0,
+        lng: venue.longitude || 0,
+        sort_order: venue.display_order || 0,
+        google_rating: venue.google_rating || null,
+        google_review_count: venue.google_review_count || null,
+        deep_dive_note: venue.deep_dive_note || null,
+        neighborhood_slug: venue.neighborhood_slug || null,
+        created_at: venue.created_at
+      }));
+
       return {
         ...category,
-        venues: venues || []
+        venues: transformedVenues
       };
     })
   );
