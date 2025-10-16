@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, Utensils, Zap, ExternalLink, Lightbulb, ArrowRight } from 'lucide-react';
+import { MapPin, Utensils, Zap, ExternalLink, Lightbulb } from 'lucide-react';
 import { RatingBadge } from './RatingBadge';
 import { Modal } from './Modal';
 import type { Venue } from '../types';
@@ -18,51 +18,54 @@ export function VenueCard({ venue, index }: VenueCardProps) {
         className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 animate-fade-in h-full flex flex-col"
         style={{ animationDelay: `${index * 100}ms` }}
       >
-        {/* TIKLANABİLİR GÖRSEL ALANI */}
+        {/* KARTIN ÜST KISMI: Görsel ve metin alanı. Tıklandığında modalı açar. */}
         <div
-          className="relative h-56 overflow-hidden cursor-pointer"
+          className="flex-grow cursor-pointer"
           onClick={() => setIsDetailOpen(true)}
         >
-          <img
-            src={venue.image}
-            alt={venue.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-          <h3 className="absolute bottom-4 left-4 text-2xl font-black text-white tracking-tight drop-shadow-lg">
-            {venue.name}
-          </h3>
+          <div className="relative h-56 overflow-hidden">
+            <img
+              src={venue.image}
+              alt={venue.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <h3 className="absolute bottom-4 left-4 text-2xl font-black text-white tracking-tight drop-shadow-lg">
+              {venue.name}
+            </h3>
+          </div>
+
+          <div className="p-5">
+            <p className="text-gray-600 leading-relaxed">{venue.mentor_note}</p>
+          </div>
         </div>
 
-        {/* METİN VE AKSİYON BÖLÜMÜ */}
-        <div className="p-5 flex flex-col flex-grow justify-between">
-          {/* TIKLANABİLİR METİN ALANI */}
-          <div className="cursor-pointer" onClick={() => setIsDetailOpen(true)}>
-            <p className="text-gray-600 mb-4 leading-relaxed">{venue.mentor_note}</p>
-          </div>
+        {/* KARTIN ALT KISMI: Bağımsız aksiyonlar. Ana tıklamayı etkilemez. */}
+        <div className="flex justify-between items-center mt-auto p-5 pt-4 border-t border-gray-100">
+          <a
+            href={venue.map_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-colors z-10"
+          >
+            <MapPin size={16} />
+            Haritada Görüntüle
+          </a>
 
-          {/* BAĞIMSIZ AKSİYON ALANI */}
-          <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
-            <button
-              onClick={() => setIsDetailOpen(true)}
-              className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-colors"
-            >
-              Detayları Gör <ArrowRight size={16} />
-            </button>
-
-            {venue.google_rating && venue.google_review_count && (
-              <div>
-                <RatingBadge
-                  rating={venue.google_rating}
-                  reviewCount={venue.google_review_count}
-                />
-              </div>
-            )}
-          </div>
+          {venue.google_rating && venue.google_review_count && (
+            <div>
+              <RatingBadge
+                rating={venue.google_rating}
+                reviewCount={venue.google_review_count}
+              />
+            </div>
+          )}
         </div>
       </div>
 
+      {/* Mekan Detay Modalı */}
       <Modal
         isOpen={isDetailOpen}
         onClose={() => setIsDetailOpen(false)}
