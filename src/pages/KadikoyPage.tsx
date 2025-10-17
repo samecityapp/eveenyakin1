@@ -4,7 +4,6 @@ import { FilterControls } from '../components/FilterControls';
 import { FoodGuide } from '../components/FoodGuide';
 import { SEO } from '../components/SEO';
 import { VenueCard } from '../components/VenueCard';
-import { GoogleSyncButton } from '../components/GoogleSyncButton';
 import { motion } from 'framer-motion';
 import type { Venue } from '../types';
 
@@ -130,22 +129,13 @@ export function KadikoyPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <div className="flex justify-between items-center mb-4">
-                  <FilterControls
-                    title="🍴 Kategori Seç"
-                    items={availableCategories}
-                    activeSlug={activeCategory}
-                    setActiveSlug={setActiveCategory}
-                    type="category"
-                  />
-                  {activeCategory && (
-                    <GoogleSyncButton
-                      districtSlug="kadikoy"
-                      categorySlug={activeCategory}
-                      onSyncComplete={loadData}
-                    />
-                  )}
-                </div>
+                <FilterControls
+                  title="🍴 Kategori Seç"
+                  items={availableCategories}
+                  activeSlug={activeCategory}
+                  setActiveSlug={setActiveCategory}
+                  type="category"
+                />
               </motion.div>
             )}
 
